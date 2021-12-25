@@ -32,7 +32,9 @@ class ManagerEvents {
     if (Array.isArray(urls)) {
       function get() {
         urls.forEach(url => {
-          axios.get(url);
+          axios.get(url)
+            .then(res => this.emit("on", res))
+            .catch(err => this.emit("off", err));
         });
       }
 
