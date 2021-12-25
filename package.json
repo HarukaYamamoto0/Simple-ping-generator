@@ -1,6 +1,6 @@
 {
   "name": "simple-ping-generator",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "a simple ping generator",
   "main": "Manager.js",
   "scripts": {
