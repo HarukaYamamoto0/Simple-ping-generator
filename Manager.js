@@ -4,7 +4,7 @@ class ManagerEvents {
   constructor() {
     this.events = {
       on: [],
-      off: []
+      off: [],
     };
   }
 
@@ -17,7 +17,7 @@ class ManagerEvents {
     if (event in this.events === false) {
       throw new Error(`the ${event} event does not exist`);
     }
-    this.events[event].forEach(e => {
+    this.events[event].forEach((e) => {
       e(...rest);
     });
   }
@@ -30,15 +30,14 @@ class ManagerEvents {
    */
   start(urls, time = 300000) {
     if (Array.isArray(urls)) {
-      function get() {
-        urls.forEach(url => {
-          axios.get(url)
-            .then(res => this.emit("on", res))
-            .catch(err => this.emit("off", err));
+      setInterval(() => {
+        urls.forEach((url) => {
+          axios
+            .get(url)
+            .then((res) => this.emit("on", res))
+            .catch((err) => this.emit("off", err));
         });
-      }
-
-      setInterval(get, time);
+      }, time);
     } else {
       throw new Error("the received value is not an array");
     }
