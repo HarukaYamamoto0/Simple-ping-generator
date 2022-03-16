@@ -3,3 +3,6 @@ package-lock.json
 node_modules
 shrinkwrap.yaml
 .glitch-assets
+.glitchdotcom.json
+.bash_history
+.config/

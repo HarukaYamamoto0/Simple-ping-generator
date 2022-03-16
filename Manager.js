@@ -4,8 +4,8 @@ class Manager {
   constructor() {
     this.events = {
       on: [],
-      off: []
-    }
+      off: [],
+    };
   }
 
   on(event, call) {
@@ -23,17 +23,17 @@ class Manager {
   }
 
   start(urls, time = 300000) {
-    if (!Array.isArray(urls) return throw new Error("You didn't pass valid urls");
+    if (!Array.isArray(urls)) throw new Error("You didn't pass valid urls");
 
-      setInterval(async () => {
-        for (const url of urls) {
-          await axios.get(url)
+    setInterval(async () => {
+      for (const url of urls) {
+        await axios
+          .get(url)
           .then((res) => this.emit("on", res))
           .catch((err) => this.emit("off", err));
-        }
-      },
-        time);
-    }
+      }
+    }, time);
   }
+}
 
-  module.exports = Manager;
+module.exports = Manager;
