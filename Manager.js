@@ -1,10 +1,10 @@
 const axios = require("axios");
 
-class ManagerEvents {
+class Manager {
   constructor() {
     this.events = {
       on: [],
-      off: []
+      off: [],
     };
   }
 
@@ -17,32 +17,23 @@ class ManagerEvents {
     if (event in this.events === false) {
       throw new Error(`the ${event} event does not exist`);
     }
-    this.events[event].forEach(e => {
+    this.events[event].forEach((e) => {
       e(...rest);
     });
   }
 
-  /*
-   * function that starts the ping generator
-   * @params [urls] - an array of urls
-   * @params [time] - the time in timestamp of delay between each ping, is optional
-   * @result start the generator
-   */
   start(urls, time = 300000) {
-    if (Array.isArray(urls)) {
-      function get() {
-        urls.forEach(url => {
-          axios.get(url)
-            .then(res => this.emit("on", res))
-            .catch(err => this.emit("off", err));
-        });
-      }
+    if (!Array.isArray(urls)) throw new Error("You didn't pass valid urls");
 
-      setInterval(get, time);
-    } else {
-      throw new Error("the received value is not an array");
-    }
+    setInterval(async () => {
+      for (const url of urls) {
+        await axios
+          .get(url)
+          .then((res) => this.emit("on", res))
+          .catch((err) => this.emit("off", err));
+      }
+    }, time);
   }
 }
 
-module.exports = ManagerEvents;
+module.exports = Manager;
