@@ -1,11 +1,11 @@
 const axios = require("axios");
 
-class ManagerEvents {
+class Manager {
   constructor() {
     this.events = {
       on: [],
-      off: [],
-    };
+      off: []
+    }
   }
 
   on(event, call) {
@@ -22,26 +22,18 @@ class ManagerEvents {
     });
   }
 
-  /*
-   * function that starts the ping generator
-   * @params [urls] - an array of urls
-   * @params [time] - the time in timestamp of delay between each ping, is optional
-   * @result start the generator
-   */
   start(urls, time = 300000) {
-    if (Array.isArray(urls)) {
-      setInterval(() => {
-        urls.forEach((url) => {
-          axios
-            .get(url)
-            .then((res) => this.emit("on", res))
-            .catch((err) => this.emit("off", err));
-        });
-      }, time);
-    } else {
-      throw new Error("the received value is not an array");
+    if (!Array.isArray(urls) return throw new Error("You didn't pass valid urls");
+
+      setInterval(async () => {
+        for (const url of urls) {
+          await axios.get(url)
+          .then((res) => this.emit("on", res))
+          .catch((err) => this.emit("off", err));
+        }
+      },
+        time);
     }
   }
-}
 
-module.exports = ManagerEvents;
+  module.exports = Manager;
